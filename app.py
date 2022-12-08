@@ -1,18 +1,19 @@
 from flask import Flask,request,render_template,url_for,jsonify
-# from tensorflow.keras import backend as K
-# from tensorflow.keras.models import load_model
+from tensorflow import keras
+from keras import backend as K
+from keras.models import load_model
 from gensim.models.keyedvectors import KeyedVectors
+from gensim.test.utils import datapath
+import nltk
 from nltk.corpus import stopwords
 import re
 import numpy as np
 
-def image():
-    return render_template("habib.png","aidah.png","salma.png","elkiya.png")
-
+nltk.download('stopwords')
 # Normalizing content of texts
 def sent2word(x):
-    # stop_words = set(stopwords.words('english')) 
-    # x=re.sub("[^A-Za-z]"," ",x)
+    stop_words = set(stopwords.words('english')) 
+    x=re.sub("[^A-Za-z]"," ",x)
     x.lower()
     filtered_sentence = [] 
     words=x.split()
@@ -47,33 +48,41 @@ def convertToVec(text):
     content=text
     if len(content) > 20:
         num_features = 300
-        model = KeyedVectors.load_word2vec_format("word2vecmodel.bin", binary=True)
+        model = KeyedVectors.load_word2vec_format(datapath('word2vec_pre_kv_c'), binary=False)
         clean_test_essays = []
         clean_test_essays.append(sent2word(content))
         testDataVecs = getVecs(clean_test_essays, model, num_features )
         testDataVecs = np.array(testDataVecs)
         testDataVecs = np.reshape(testDataVecs, (testDataVecs.shape[0], 1, testDataVecs.shape[1]))
 
-        # lstm_model = load_model("final_lstm.h5")
+        lstm_model = load_model("final_lstm.h5")
         preds = lstm_model.predict(testDataVecs)
         return str(round(preds[0][0]))
 
 
-app = Flask(__name__)
-# model = load_model('final_lstm.h5')
 
-@app.get('/')
-def index_get():
-    image()
-    return render_template('index.html')
+# Ceck using data dummy 
+final_text = "I want to find job, do you have some? If so, please give me some :)"
+score = convertToVec(final_text)
+print(final_text + "/n" + score)
+# app = Flask(__name__)
 
-@app.route("/", methods=['POST'])
-def create_task():
-    # K.clear_session()
-    final_text = request.get_json("text")["text"]
-    score = convertToVec(final_text)
-    # K.clear_session()
-    return jsonify({'score': score}), 201
+# @app.get('/')
+# def index_get():
+#     return render_template('index.html')
 
-if __name__=='__main__':
-    app.run(debug=True)
+# @app.route("/")
+# def image():
+#     return render_template("habib.png","aidah.png","salma.png","elkiya.png")
+    
+# @app.route("/", methods=['POST'])
+# def create_task():
+#     K.clear_session()
+#     final_text = request.get_json("text")["text"]
+#     score = convertToVec(final_text)
+#     print(final_text + "/n" + score)
+#     K.clear_session()
+#     return jsonify({score: score})
+
+# if __name__=='__main__':
+#     app.run(debug=True)

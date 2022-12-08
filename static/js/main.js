@@ -258,8 +258,10 @@ function senddata(){
   var text = document.getElementById('input-text');
   var output = document.getElementById("output");
   const obj = {text : text.value};
-  console.log(obj.content);
-  const str = JSON.stringify(obj)
+  
+  // const str = JSON.stringify(obj)
+  // console.log(str);
+
   fetch("http://127.0.0.1:5000/", {
     method: 'POST',
     body: JSON.stringify(obj),
@@ -272,6 +274,6 @@ function senddata(){
     }
     console.log('Success:', result);  
   }).catch((error) => {
-    console.error('Error:', error);
+    console.error('Error:', error); 
   });
 }
