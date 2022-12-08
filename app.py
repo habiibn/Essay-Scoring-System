@@ -2,6 +2,7 @@ from flask import Flask,request,render_template,url_for,jsonify
 from tensorflow import keras
 from keras import backend as K
 from keras.models import load_model
+from gensim.models import Word2Vec
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.test.utils import datapath
 import nltk
@@ -9,7 +10,6 @@ from nltk.corpus import stopwords
 import re
 import numpy as np
 
-nltk.download('stopwords')
 # Normalizing content of texts
 def sent2word(x):
     stop_words = set(stopwords.words('english')) 
@@ -26,9 +26,9 @@ def sent2word(x):
 def makeVec(words, model, num_features):
     vec = np.zeros((num_features,),dtype="float32")
     noOfWords = 0.
-    index2word_set = set(model.wv.index2word)
+    # index2word_set = set(model.wv.index2word)
     for i in words:
-        if i in index2word_set:
+        if i in model:
             noOfWords += 1
             vec = np.add(vec,model[i])        
     vec = np.divide(vec,noOfWords)
@@ -51,7 +51,7 @@ def convertToVec(text):
         model = KeyedVectors.load_word2vec_format(datapath('word2vec_pre_kv_c'), binary=False)
         clean_test_essays = []
         clean_test_essays.append(sent2word(content))
-        testDataVecs = getVecs(clean_test_essays, model, num_features )
+        testDataVecs = getVecs(clean_test_essays, model, num_features)
         testDataVecs = np.array(testDataVecs)
         testDataVecs = np.reshape(testDataVecs, (testDataVecs.shape[0], 1, testDataVecs.shape[1]))
 
