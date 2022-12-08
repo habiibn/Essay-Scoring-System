@@ -255,13 +255,12 @@
 })()
   
 function senddata(){
-  var text = document.getElementById("main")
-  var output = document.getElementById("output")
-  const obj = {
-    text:text.value
-  }
+  var text = document.getElementById('input-text');
+  var output = document.getElementById("output");
+  const obj = {text : text.value};
+  console.log(obj.content);
   const str = JSON.stringify(obj)
-  fetch("http://127.0.0.1:5500/", {
+  fetch("http://127.0.0.1:5000/", {
     method: 'POST',
     body: JSON.stringify(obj),
   }).then((response) => response.json()).then((result) => {
