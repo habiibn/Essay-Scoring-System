@@ -25,12 +25,15 @@ def sent2word(x):
 # Making word of given text to vector based on given reference model
 def makeVec(words, model, num_features):
     vec = np.zeros((num_features,),dtype="float32")
-    noOfWords = 0.
-    # index2word_set = set(model.wv.index2word)
+    print(vec)
+    noOfWords = 0
+    # index2word_set = set(model.index_to_key)
     for i in words:
         if i in model:
             noOfWords += 1
-            vec = np.add(vec,model[i])        
+            vec = np.add(vec,model[i])    
+            print(vec)    
+            print(vec.shape)    
     vec = np.divide(vec,noOfWords)
     return vec
 
@@ -38,6 +41,7 @@ def makeVec(words, model, num_features):
 def getVecs(essays, model, num_features):
     c=0
     essay_vecs = np.zeros((len(essays),num_features),dtype="float32")
+    print(essay_vecs.shape)
     for i in essays:
         essay_vecs[c] = makeVec(i, model, num_features)
         c+=1
@@ -47,10 +51,12 @@ def getVecs(essays, model, num_features):
 def convertToVec(text):
     content=text
     if len(content) > 20:
-        num_features = 300
-        model = KeyedVectors.load_word2vec_format(datapath('word2vec_pre_kv_c'), binary=False)
+        num_features = 200
+        model = KeyedVectors.load_word2vec_format(datapath("word2vec_pre_kv_c"), binary=False)
+        print(model)
         clean_test_essays = []
         clean_test_essays.append(sent2word(content))
+        print(clean_test_essays)
         testDataVecs = getVecs(clean_test_essays, model, num_features)
         testDataVecs = np.array(testDataVecs)
         testDataVecs = np.reshape(testDataVecs, (testDataVecs.shape[0], 1, testDataVecs.shape[1]))
