@@ -59,7 +59,7 @@ def getAvgFeatureVecs(essays, model, num_features):
 
 
 embedding_dict={}
-with open('glove.6B.200d.txt','r',encoding='utf-8') as f:
+with open('glove.6B.50d.txt','r',encoding='utf-8') as f:
     for line in f:
         values = line.split()
         word = values[0]
