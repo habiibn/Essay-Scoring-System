@@ -59,7 +59,7 @@ def getAvgFeatureVecs(essays, model, num_features):
 
 
 embedding_dict={}
-with open('glove.6B.200d.txt','r',encoding='utf-8') as f:
+with open('glove.6B.50d.txt','r',encoding='utf-8') as f:
     for line in f:
         values = line.split()
         word = values[0]
@@ -70,14 +70,14 @@ model = embedding_dict
 
 def final (text):
     if len(text) > 20:
-        num_features = 200
+        num_features = 50
         clean_test_essays = []
         clean_test_essays.append(esai_ke_listkata( text, remove_stopwords=True ))
         testDataVecs = getAvgFeatureVecs( clean_test_essays, model, num_features )
         testDataVecs = np.array(testDataVecs)
         testDataVecs = np.reshape(testDataVecs, (testDataVecs.shape[0], 1, testDataVecs.shape[1]))
 
-        lstm_model = load_model("model_lstm.h5")
+        lstm_model = load_model("model_lstm_50.h5")
         prediksi = lstm_model.predict(testDataVecs)
 
         if math.isnan(prediksi):
