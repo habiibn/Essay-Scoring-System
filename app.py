@@ -115,3 +115,6 @@ def sample():
         return render_template('index.html', sample_input=sample_input, sample_output=final1_output)
     elif request.method == 'GET':
         return render_template('index.html')
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port = 5000)
