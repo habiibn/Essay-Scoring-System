@@ -2,6 +2,7 @@ from flask import Flask,request,render_template,url_for,jsonify
 import site
 import numpy as np
 import pandas as pd
+import pickle
 import nltk
 nltk.download('stopwords')
 import re
@@ -58,15 +59,11 @@ def getAvgFeatureVecs(essays, model, num_features):
     return essayFeatureVecs
 
 
-embedding_dict={}
-with open('glove.6B.50d.txt','r',encoding='utf-8') as f:
-    for line in f:
-        values = line.split()
-        word = values[0]
-        vectors = np.asarray(values[1:],'float32')
-        embedding_dict[word] = vectors
+with open('saved_dictionary .pkl', 'rb') as f:
+    data = pickle.load(f)
 
-model = embedding_dict
+
+model = data
 
 def final (text):
     if len(text) > 20:
@@ -117,4 +114,4 @@ def sample():
         return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port = 5000)
+    app.run(debug='off')
