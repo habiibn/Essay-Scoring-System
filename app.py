@@ -59,7 +59,7 @@ def getAvgFeatureVecs(essays, model, num_features):
     return essayFeatureVecs
 
 
-with open('saved_dictionary .pkl', 'rb') as f:
+with open('saved_dictionary.pkl', 'rb') as f:
     data = pickle.load(f)
 
 
