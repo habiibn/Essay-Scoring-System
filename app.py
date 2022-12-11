@@ -58,12 +58,16 @@ def getAvgFeatureVecs(essays, model, num_features):
         counter = counter + 1
     return essayFeatureVecs
 
+embedding_dict={}
+with open('/content/glove.6B.50d.txt','r') as f:
+    for line in f:
+        values = line.split()
+        word = values[0]
+        vectors = np.asarray(values[1:],'float32')
+        embedding_dict[word] = vectors
 
-with open('saved_dictionary.pkl', 'rb') as f:
-    data = pickle.load(f)
 
-
-model = data
+model = embedding_dict
 
 def final (text):
     if len(text) > 20:
